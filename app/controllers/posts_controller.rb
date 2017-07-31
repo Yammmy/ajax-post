@@ -51,6 +51,20 @@ class PostsController < ApplicationController
     render "like"
   end
 
+  def collect
+    @post = Post.find(params[:id])
+    unless @post.find_collection(current_user)
+      Collection.create!(:user => current_user, :post => @post)
+    end
+  end
+
+  def discollect
+    @post  = Post.find(params[:id])
+    collection = @post.find_collection(current_user)
+    collection.destroy
+    render "collect"
+  end
+
   def toggle_flag
     @post = Post.find(params[:id])
 
